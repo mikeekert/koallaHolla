@@ -33,7 +33,13 @@ function getKoalas() {
     success: function( data ){
       console.log('received data', data);
       for (var i = 0; i < data.length; i++) {
-        $('#viewKoalas').append('<tr><th>'+ data[i].name + '</th>' +  '<th>'+ data[i].age + '</th>' + '<th>'+ data[i].gender + '</th>' + '<th>'+ data[i].ready_for_transfer + '</th>' + '<th>'+ data[i].notes + '</th>' + '</tr>');
+        var $display = $('<tr></tr>');
+        $display.append($( ('<th>'), {text: data[i].name, class: 'data'} ) );
+        $display.append($( ('<th>'), {text: data[i].age, class: 'data'} ) );
+        $display.append($( ('<th>'), {text: data[i].gender, class: 'data'} ) );
+        $display.append($( ('<th>'), {text: data[i].ready_for_transfer, class: 'data'} ) );
+        $display.append($( ('<th>'), {text: data[i].notes, class: 'data'} ) );
+        $('#viewKoalas').append($display);
       }
     } // end success
   }); //end ajax`
