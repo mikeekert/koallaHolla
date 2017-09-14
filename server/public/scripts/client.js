@@ -63,18 +63,21 @@ function saveKoala( newKoala ){
     type: 'POST',
     data: newKoala,
     success: function( data ){
+      console.log(data);
     } // end success
   }); //end ajax
   getKoalas();        
 }
 
 function transferKoala() {
-  console.log( $(this).parent().parent().data('id') );
-  var sendingKoala = Number( $(this).parent().parent().data('id') );
+  var sendingKoala = {
+    id: ( $(this).parent().parent().data('id') ).toString()
+  };
+  console.log( 'sending via post:', sendingKoala );
   $.ajax ({
     url: '/update',
-    method: 'POST',
-    data: $(this).parent().parent().data('id'),
+    type: 'POST',
+    data: sendingKoala ,
     success: getKoalas()
   });
 }
