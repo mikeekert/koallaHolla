@@ -16,7 +16,8 @@ router.post('/', function(req, res) {
                 if (err) { 
                     console.log('error db', err); res.sendStatus(500);
                 }
-                else { res.sendStatus(202); 
+                else { 
+                    res.sendStatus(202); 
                     console.log('rows', results.rows);
                 }
             });

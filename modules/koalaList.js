@@ -46,4 +46,22 @@ router.post('/', function(req, res) {
     });
 });
 
+router.delete('/:id', function(req,res){
+    var dbID = req.params.id;
+    pool.connect(function (err, client, done){
+        if(err) {
+            res.sendStatus(500);
+        } else {
+            var text = 'DELETE * FROM koalalas WHERE id = $1;';
+            client.query(text, dbID, function(){
+                done();
+                if (err) {
+                    res.sendStatus(500);
+                } else {
+                    res.sendStatus(201);
+                }
+            });
+        }
+    });
+});
 module.exports = router;

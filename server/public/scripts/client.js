@@ -1,26 +1,18 @@
 console.log( 'js' );
 $( document ).ready( function(){
-  console.log( 'JQ' );
-  // load existing koalas on page load
   getKoalas();
 
-  // add koala button click
   $('#viewKoalas').on('click', '.addButton', transferKoala);
-    // console.log($(this));
-    // $(this).hide().parent().text('Transfered');
-
   $( '#addButton' ).on( 'click', function(){
-    // get user input and put in an object
-    // NOT WORKING YET :(
-    // using a test object
     var objectToSend = {
-      name: $('#nameIn').val(),
-      age: $('#ageIn').val(),
-      gender: $('#genderIn').val(),
-      readyForTransfer: $('#readyForTransferIn').val(),
-      notes: $('#notesIn').val(),
-    };
-    // call saveKoala with the new obejct
+    name: $('#nameIn').val(),
+    age: $('#ageIn').val(),
+    gender: $('#genderIn').val(),
+    readyForTransfer: $('#readyForTransferIn').val(),
+    notes: $('#notesIn').val(),
+  };
+  $('#viewKoalas').on('click', '.delButton', deleteKoala);
+
     saveKoala( objectToSend );
     $('input:text').val('');
   }); //end addButton on click
@@ -43,12 +35,13 @@ function getKoalas() {
           var $button = ( $( ('<th>'), {class: 'data'} ) );   
           $button.append($( ('<button>'), {class: 'addButton', text: 'Ready to Transfer'} ) );  
           $display.append($button);
-          
         } else {
           $display.append($( ('<th></th>'), {text: 'Transfered', class: 'data'} ) );   
-          
         }
         $display.append($( ('<th>'), {text: data[i].notes, class: 'data'} ) );
+        var $buttonDel = ( $( ('<th>'), {class: 'delete'} ) );   
+        $buttonDel.append($( ('<button>'), {class: 'btn btn-danger delButton', text: 'Delete'} ) );  
+        $display.append($buttonDel);        
         $('#viewKoalas').append($display);
       }
     } // end success
@@ -77,7 +70,20 @@ function transferKoala() {
   $.ajax ({
     url: '/update',
     type: 'POST',
-    data: sendingKoala ,
+    data: sendingKoala,
     success: getKoalas()
+  });
+}
+
+function deleteKoala() {
+  console.log('click!');
+  var thisID = $(this).parent().parent().data('id');
+  console.log(thisID);
+  $.ajax ({
+    url: '/delete'+thisID,
+    success: function(resp) {
+      console.log(resp);
+      getKoalas();
+    }
   });
 }
