@@ -1,11 +1,14 @@
 console.log( 'js' );
-
 $( document ).ready( function(){
   console.log( 'JQ' );
   // load existing koalas on page load
   getKoalas();
 
   // add koala button click
+  $('#viewKoalas').on('click', '.addButton', function(){
+    // console.log($(this));
+    $(this).hide().parent().text('Transfered');
+  });
   $( '#addButton' ).on( 'click', function(){
     // get user input and put in an object
     // NOT WORKING YET :(
@@ -25,7 +28,6 @@ $( document ).ready( function(){
 
 function getKoalas() {
   $('#viewKoalas').empty();
-  
   // ajax call to server to get koalas
   $.ajax({
     url: '/koalaList',
@@ -37,7 +39,15 @@ function getKoalas() {
         $display.append($( ('<th>'), {text: data[i].name, class: 'data'} ) );
         $display.append($( ('<th>'), {text: data[i].age, class: 'data'} ) );
         $display.append($( ('<th>'), {text: data[i].gender, class: 'data'} ) );
-        $display.append($( ('<th>'), {text: data[i].ready_for_transfer, class: 'data'} ) );
+        if ( data[i].ready_for_transfer )  {
+          var $button = ( $( ('<th>'), {class: 'data'} ) );   
+          $button.append($( ('<button>'), {class: 'addButton', text: 'Ready to Transfer'} ) );  
+          $display.append($button);
+          
+        } else {
+          $display.append($( ('<th></th>'), {text: 'Transfered', class: 'data'} ) );   
+          
+        }
         $display.append($( ('<th>'), {text: data[i].notes, class: 'data'} ) );
         $('#viewKoalas').append($display);
       }
