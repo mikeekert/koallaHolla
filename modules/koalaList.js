@@ -8,7 +8,7 @@ router.get('/', function(req, res) {
             res.sendStatus(500);
         }
         else {
-            client.query('SELECT * FROM koalalas', function(error, resultSet){
+            client.query('SELECT * FROM koalalas ORDER BY name;', function(error, resultSet){
                 done();
                 if (error) {
                     res.sendStatus(500);

@@ -1,5 +1,7 @@
 console.log( 'js' );
+var $userDisplay = '';
 $( document ).ready( function(){
+
   getKoalas();
   $('#viewKoalas').on('click', '.addButton', transferKoala);
   $( '#viewKoalas' ).on('click', '.delButton', deleteKoala);
@@ -18,7 +20,11 @@ $( document ).ready( function(){
 }); // end doc ready
 
 function getKoalas() {
+  $('#viewKoalas').hide();
+  
   $('#viewKoalas').empty();
+  $('#viewKoalas').show();
+  
   // ajax call to server to get koalas
   $.ajax({
     url: '/koalaList',
@@ -45,7 +51,6 @@ function getKoalas() {
       }
     } // end success
   }); //end ajax`
-  // display on DOM with buttons that allow edit of each
 } // end getKoalas
 
 function saveKoala( newKoala ){
@@ -56,9 +61,9 @@ function saveKoala( newKoala ){
     data: newKoala,
     success: function( data ){
       console.log(data);
+      getKoalas();              
     } // end success
   }); //end ajax
-  getKoalas();        
 }
 
 function transferKoala() {
@@ -70,7 +75,9 @@ function transferKoala() {
     url: '/update',
     type: 'POST',
     data: sendingKoala,
-    success: getKoalas()
+    success: function(resp) {
+      getKoalas();
+    }
   });
 }
 
