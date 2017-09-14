@@ -5,10 +5,10 @@ $( document ).ready( function(){
   getKoalas();
 
   // add koala button click
-  $('#viewKoalas').on('click', '.addButton', function(){
+  $('#viewKoalas').on('click', '.addButton', transferKoala);
     // console.log($(this));
-    $(this).hide().parent().text('Transfered');
-  });
+    // $(this).hide().parent().text('Transfered');
+
   $( '#addButton' ).on( 'click', function(){
     // get user input and put in an object
     // NOT WORKING YET :(
@@ -35,7 +35,7 @@ function getKoalas() {
     success: function( data ){
       console.log('received data', data);
       for (var i = 0; i < data.length; i++) {
-        var $display = $('<tr></tr>');
+        var $display = ($('<tr>').data('id', data[i].id));
         $display.append($( ('<th>'), {text: data[i].name, class: 'data'} ) );
         $display.append($( ('<th>'), {text: data[i].age, class: 'data'} ) );
         $display.append($( ('<th>'), {text: data[i].gender, class: 'data'} ) );
@@ -66,4 +66,15 @@ function saveKoala( newKoala ){
     } // end success
   }); //end ajax
   getKoalas();        
+}
+
+function transferKoala() {
+  console.log( $(this).parent().parent().data('id') );
+  var sendingKoala = Number( $(this).parent().parent().data('id') );
+  $.ajax ({
+    url: '/update',
+    method: 'POST',
+    data: $(this).parent().parent().data('id'),
+    success: getKoalas()
+  });
 }
