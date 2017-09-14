@@ -1,8 +1,9 @@
 console.log( 'js' );
 $( document ).ready( function(){
   getKoalas();
-
   $('#viewKoalas').on('click', '.addButton', transferKoala);
+  $( '#viewKoalas' ).on('click', '.delButton', deleteKoala);
+  
   $( '#addButton' ).on( 'click', function(){
     var objectToSend = {
     name: $('#nameIn').val(),
@@ -11,8 +12,6 @@ $( document ).ready( function(){
     readyForTransfer: $('#readyForTransferIn').val(),
     notes: $('#notesIn').val(),
   };
-  $('#viewKoalas').on('click', '.delButton', deleteKoala);
-
     saveKoala( objectToSend );
     $('input:text').val('');
   }); //end addButton on click
@@ -40,7 +39,7 @@ function getKoalas() {
         }
         $display.append($( ('<th>'), {text: data[i].notes, class: 'data'} ) );
         var $buttonDel = ( $( ('<th>'), {class: 'delete'} ) );   
-        $buttonDel.append($( ('<button>'), {class: 'btn btn-danger delButton', text: 'Delete'} ) );  
+        $buttonDel.append($( ('<button>'), {class: 'delButton', text: 'Delete'} ) );  
         $display.append($buttonDel);        
         $('#viewKoalas').append($display);
       }
@@ -80,7 +79,8 @@ function deleteKoala() {
   var thisID = $(this).parent().parent().data('id');
   console.log(thisID);
   $.ajax ({
-    url: '/delete'+thisID,
+    method: 'DELETE',
+    url: '/koalaList/'+thisID,
     success: function(resp) {
       console.log(resp);
       getKoalas();
